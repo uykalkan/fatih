@@ -4,7 +4,7 @@
   "description": "Developer Assistance",
   "main": "fatih.sh",
   "bin": {
-    "fastback": "fatih.sh"
+    "fatih": "./index.js"
   },
   "repository": {
     "type": "git",
