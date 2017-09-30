@@ -1,6 +1,6 @@
 {
   "name": "fatih",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "Developer Assistance",
   "main": "fatih.sh",
   "bin": {
@@ -16,9 +16,9 @@
   ],
   "author": [
     {
-      "name" : "Ümit Yaşar Kalkan",
+      "name": "Ümit Yaşar Kalkan",
       "email": "uykalkan@gmail.com",
-      "url" : "https://github.com/uykalkan"
+      "url": "https://github.com/uykalkan"
     }
   ],
   "license": "MIT",
