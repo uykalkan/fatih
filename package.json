@@ -1,0 +1,29 @@
+{
+  "name": "fatih",
+  "version": "1.0",
+  "description": "Developer Assistance",
+  "main": "fatih.sh",
+  "bin": {
+    "fastback": "fatih.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uykalkan/fatih.git"
+  },
+  "keywords": [
+    "developer",
+    "assistance"
+  ],
+  "author": [
+    {
+      "name" : "Ümit Yaşar Kalkan",
+      "email": "uykalkan@gmail.com",
+      "url" : "https://github.com/uykalkan"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/uykalkan/fatih/issues"
+  },
+  "homepage": "https://github.com/uykalkan/fatih#readme"
+}
