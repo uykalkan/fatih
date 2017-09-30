@@ -2,7 +2,7 @@
   "name": "fatih",
   "version": "1.0.0",
   "description": "Developer Assistance",
-  "main": "fatih.sh",
+  "main": "index.js",
   "bin": {
     "fatih": "./index.js"
   },

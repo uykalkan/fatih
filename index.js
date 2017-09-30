@@ -1,1 +1,2 @@
-console.log("coming soon...")
+#!/usr/bin/env node
+console.log("coming soon...");
