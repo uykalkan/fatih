@@ -14,13 +14,7 @@
     "developer",
     "assistance"
   ],
-  "author": [
-    {
-      "name": "Ümit Yaşar Kalkan",
-      "email": "uykalkan@gmail.com",
-      "url": "https://github.com/uykalkan"
-    }
-  ],
+  "author": "Ümit Yaşar Kalkan <uykalkan@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/uykalkan/fatih/issues"
