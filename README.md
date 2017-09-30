@@ -1,9 +1,6 @@
-# fastback
-Fast backup and restore utility for cpanel managed web servers
-
-## Note: fastback is experimental for now, so don't use it for real purposes
+# Fatih
+Fatih a.k.a the intelligent hero
 
 ## Installation
 ```
-npm install -g fastback
-```
+npm install -g fatih
