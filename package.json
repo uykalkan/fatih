@@ -1,6 +1,6 @@
 {
   "name": "fatih",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Developer Assistance",
   "main": "index.js",
   "bin": {
@@ -19,5 +19,13 @@
   "bugs": {
     "url": "https://github.com/uykalkan/fatih/issues"
   },
-  "homepage": "https://github.com/uykalkan/fatih#readme"
+  "homepage": "https://github.com/uykalkan/fatih#readme",
+  "dependencies": {
+    "argv": "0.0.2",
+    "commander": "^2.11.0",
+    "inquirer": "^3.3.0",
+    "jsonfile": "^4.0.0",
+    "path": "^0.12.7",
+    "shelljs": "^0.7.8"
+  }
 }
