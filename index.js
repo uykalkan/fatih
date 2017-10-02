@@ -5,9 +5,9 @@ var path = require('path');
 var shell = require('shelljs');
 var inquirer = require('inquirer');
 var program = require('commander');
-var homeDir = require('home-dir').directory;
+var os = require('os');
 
-var file = path.join(homeDir, '/.fatih.json');
+var file = path.join(os.homedir(), '/.fatih.json');
 var path_here  = shell.pwd().stdout;
 
 config_default = {
