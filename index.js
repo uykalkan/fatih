@@ -8,7 +8,7 @@ var os = require('os');
 var questions = require('./questions');
 var util = require('./util');
 
-var file = path.join(os.homedir(), '/.fatih.json');
+var setting_file = path.join(os.homedir(), '/.fatih.json');
 var path_here  = shell.pwd().stdout;
 var args = process.argv.slice(2);
 
@@ -34,9 +34,20 @@ if (args[0] && fatih_data != null) {
     }
 }
 
+// function index(project_name, project_path) {
+//     jsonfile.readFile(setting_file, function(err, obj) {
+//         if (obj) {
+//             obj[project_name] = project_path;
+//             jsonfile.writeFileSync(setting_file, obj, {spaces: 2});
+//         } else {
+//             jsonfile.writeFileSync(setting_file, default_settings, {spaces: 2});
+//         }
+//     })
+// }
+
 program.version('2.0.0');
 
-// ADD COMMAND
+// INIT COMMAND
 program
 .command('init')
 .description('yeni bir proje ekleyin')
