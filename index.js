@@ -7,56 +7,54 @@ var program = require('commander');
 var os = require('os');
 var questions = require('./questions');
 var util = require('./util');
+var store = require('store');
+var fs = require('fs');
 
 var setting_file = path.join(os.homedir(), '/.fatih.setting.json');
-var path_here  = shell.pwd().stdout;
 var args = process.argv.slice(2);
 
 var exec = require('child_process').exec;
 
 var fatih_data = util.readFatih();
+var fatih_settings = util.readSettingsFatih();
 
+var default_fatih_settings = {
+    editor: 'code',
+    index: {},
+};
 
-<<<<<<< HEAD
-jsonfile.readFile(setting_file, function(err, obj) {
-    if (!obj) {
-        jsonfile.writeFileSync(setting_file, default_settings, {spaces: 2});
-        config = default_settings;
-        fatihReady();
-    } else {
-        config = obj;
-        fatihReady();
-    }
-})
-=======
-if (args[0] && fatih_data != null) {
-    
-    if(Object.keys(fatih_data.custom_commands).includes(args[0])){
+// indexi döner ve configi yerinde olmayan varsa indexten kaldırır
+clearIndex();
 
-        switch(args[0]) {
-            case 'is':
-                 shell.exec('start '+obj.github+'/issues');
-                break;
-            default:
-                var selected_command = fatih_data.custom_commands[args[0]];
-                shell.exec('start cmd /K "'+selected_command+'"');
-                process.exit(1);
-        }
-
-    }
+if (!fatih_settings) {
+    util.writeSettingsFatih(default_fatih_settings).then(function(){
+        var fatih_settings = default_fatih_settings;
+    });
 }
->>>>>>> 96f155d746b1e911a3cbd6b16599ae5b29e68a12
 
-// function index(project_name, project_path) {
-//     jsonfile.readFile(setting_file, function(err, obj) {
-//         if (obj) {
-//             obj[project_name] = project_path;
-//             jsonfile.writeFileSync(setting_file, obj, {spaces: 2});
-//         } else {
-//             jsonfile.writeFileSync(setting_file, default_settings, {spaces: 2});
-//         }
-//     })
-// }
+if (args[0] && fatih_data != null) {
+
+    switch (args[0]) {
+        case 'is':
+            shell.exec('start '+fatih_data.github+'/issues');
+        break;
+
+        case 'editor':
+            shell.exec('code -n '+process.cwd());
+        break;
+
+        default:
+            var selected_command = fatih_data.custom_commands[args[0]];
+            if (selected_command) {
+                shell.exec('start cmd /K "'+selected_command+'"');
+                process.exit(1);                
+            } else {
+                console.log('Böyle bir komut bulunmamaktadır');
+            }
+        break;
+    }
+    
+}
 
 program.version('2.0.0');
 
@@ -75,6 +73,11 @@ program
                 "pull" : "git pull",
                 "push" : "git push"
             }
+        }).then(function(){
+            fatih_settings.index[answers.project_name] = shell.pwd().stdout;
+            util.writeSettingsFatih(fatih_settings).then(function(){
+
+            });
         });
 
     }).then(function(){
@@ -84,26 +87,39 @@ program
     })
 });
 
-function fatihReady() {   
-    if (args[0]) {
-        jsonfile.readFile('./fatih.json', function(err, obj) {
-            try {
-                if (obj.custom_commands[args[0]]) {
-                    console.log('asdasdasd');
-                    var selected_command = obj.custom_commands[args[0]];
-                    shell.exec('start cmd /K "'+selected_command+'"');
-                    process.exit(1);
-                } else if (args[0] == 'is') {
-                    shell.exec('start '+obj.github+'/issues');
-                    process.exit(1);
-                }    
-            } catch(e){
-                if(e){
-                    
-                }
-            }         
-        })    
-    }    
-}
+// GO COMMAND
+program
+.command('go')
+.description('projenize gidin')
+.action(function(env, options){
 
+    var question = [
+        {
+            type: 'list',
+            name: 'project',
+            message: 'Hangi projeye gidiyoruz?',
+            choices: Object.keys(fatih_settings.index)
+        }
+    ];
+
+    inquirer.prompt(question).then(function (answers) {
+        project_path = fatih_settings.index[answers.project];
+        shell.exec('start "" "'+project_path+'"');
+        clearIndex();
+    });
+});
 program.parse(process.argv);
+
+function clearIndex() {
+    for (var key in fatih_settings.index) {
+        var path = fatih_settings.index[key];
+        if (!fs.existsSync(path+'/.fatih')) {
+            console.log('naberrr');
+            delete fatih_settings.index[key];
+        }            
+    }    
+
+    util.writeSettingsFatih(fatih_settings).then(function(){
+        
+    });
+}
