@@ -5,8 +5,9 @@ var path = require('path');
 var shell = require('shelljs');
 var inquirer = require('inquirer');
 var program = require('commander');
+var homeDir = require('home-dir').directory;
 
-var file = process.env.APPDATA+'/fatih.json';
+var file = homeDir+'/.fatih.json';
 var path_here  = shell.pwd().stdout;
 
 config_default = {
@@ -23,7 +24,7 @@ config_default = {
 
 jsonfile.readFile(file, function(err, obj) {
     if (!obj) {
-        jsonfile.writeFileSync(file, {}, {spaces: 2});
+        jsonfile.writeFileSync(file, config_default, {spaces: 2});
         config = config_default;
         fatihReady();
     } else {
@@ -54,7 +55,7 @@ function fatihReady () {
 /////////////////
 /////////////////
 
-program.version('1.0.0');
+program.version('1.0.3');
 
 // ADD COMMAND
 program
@@ -157,6 +158,37 @@ program
         inquirer.prompt(questions).then(function (answers) {
             var project_path = projects[answers.project].location;
             shell.exec('start cmd /K "cd '+project_path+'"');                
+        });
+    }
+});
+
+// ADD COMMAND
+program
+.command('folder [project_name]')
+.description('Projenizi klasörde açın')
+.action(function(env, options){
+    if (env) {
+        console.log(env);
+        if (!projects[env]) {
+            console.log("Project not found");
+            return;
+        }
+
+        var project_path = projects[env].location;
+        shell.exec('start "" "'+project_path+'"');
+    } else {
+        var questions = [
+            {
+                type: 'list',
+                name: 'project',
+                message: 'Hangi projeyi klasörde açacaksınız?',
+                choices: Object.keys(projects)
+            }
+        ];
+
+        inquirer.prompt(questions).then(function (answers) {
+            var project_path = projects[answers.project].location;
+            shell.exec('start "" "'+project_path+'"');               
         });
     }
 });

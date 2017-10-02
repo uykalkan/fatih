@@ -1,6 +1,6 @@
 {
   "name": "fatih",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Developer Assistance",
   "main": "index.js",
   "bin": {
@@ -23,6 +23,7 @@
   "dependencies": {
     "argv": "0.0.2",
     "commander": "^2.11.0",
+    "home-dir": "^1.0.0",
     "inquirer": "^3.3.0",
     "jsonfile": "^4.0.0",
     "path": "^0.12.7",

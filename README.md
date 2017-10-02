@@ -18,3 +18,9 @@ fatih -h
     editor [project_name]    Projenizi editörde açın
     terminal [project_name]  Projenizi terminalde açın
 ```
+
+## Set editor
+##Example
+```
+fatih set "C:\Program Files\Microsoft VS Code\Code.exe"
+```
