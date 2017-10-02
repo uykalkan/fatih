@@ -24,12 +24,12 @@ var default_fatih_settings = {
 };
 
 // indexi döner ve configi yerinde olmayan varsa indexten kaldırır
-clearIndex();
-
 if (!fatih_settings) {
     util.writeSettingsFatih(default_fatih_settings).then(function(){
         var fatih_settings = default_fatih_settings;
     });
+} else {
+    clearIndex();
 }
 
 if (args[0] && fatih_data != null) {
@@ -49,7 +49,7 @@ if (args[0] && fatih_data != null) {
                 shell.exec('start cmd /K "'+selected_command+'"');
                 process.exit(1);                
             } else {
-                console.log('Böyle bir komut bulunmamaktadır');
+                //
             }
         break;
     }
@@ -102,11 +102,17 @@ program
         }
     ];
 
-    inquirer.prompt(question).then(function (answers) {
-        project_path = fatih_settings.index[answers.project];
-        shell.exec('start "" "'+project_path+'"');
-        clearIndex();
-    });
+    if (Object.keys(fatih_settings.index).length) {
+        inquirer.prompt(question).then(function (answers) {
+            project_path = fatih_settings.index[answers.project];
+            shell.exec('start "" "'+project_path+'"');
+            clearIndex();
+        });        
+    } else {
+        console.log('Hiç projeniz yok');
+    }
+
+
 });
 program.parse(process.argv);
 
