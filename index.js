@@ -11,7 +11,7 @@ var file = path.join(homeDir, '/.fatih.json');
 var path_here  = shell.pwd().stdout;
 
 config_default = {
-    "editor": "C:\\Program Files\\Microsoft VS Code\\Code.exe",
+    "editor": "code",
     "projects": {
         "fatih": {
           "location" : "C:\\xampp\\htdocs\\fatih"
