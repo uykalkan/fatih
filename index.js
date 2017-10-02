@@ -54,7 +54,7 @@ if (args[0]) {
 
 program.version('2.0.0');
 
-// ADD COMMAND
+// INIT COMMAND
 program
 .command('init')
 .description('yeni bir proje ekleyin')
