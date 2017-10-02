@@ -17,6 +17,7 @@ fatih -h
     set [file_name]          Editörünüzü seçin
     editor [project_name]    Projenizi editörde açın
     terminal [project_name]  Projenizi terminalde açın
+    folder [project_name]    Projenizi klasörde açın
 ```
 
 ## Set editor
