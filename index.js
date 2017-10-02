@@ -7,7 +7,7 @@ var inquirer = require('inquirer');
 var program = require('commander');
 var homeDir = require('home-dir').directory;
 
-var file = homeDir+'/.fatih.json';
+var file = path.join(homeDir, '/.fatih.json');
 var path_here  = shell.pwd().stdout;
 
 config_default = {
