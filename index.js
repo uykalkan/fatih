@@ -6,7 +6,7 @@ var inquirer = require('inquirer');
 var program = require('commander');
 var os = require('os');
 
-var setting_file = path.join(os.homedir(), '/.fatih.json');
+var setting_file = path.join(os.homedir(), '/.fatih.setting.json');
 var path_here  = shell.pwd().stdout;
 var args = process.argv.slice(2);
 
@@ -21,25 +21,16 @@ var default_settings = {
     }
 }
 
-if (args[0]) {
-    jsonfile.readFile('./fatih.json', function(err, obj) {
-        try {
-            if (obj.custom_commands[args[0]]) {
-                console.log('asdasdasd');
-                var selected_command = obj.custom_commands[args[0]];
-                shell.exec('start cmd /K "'+selected_command+'"');
-                process.exit(1);
-            } else if (args[0] == 'is') {
-                shell.exec('start '+obj.github+'/issues');
-                process.exit(1);
-            }    
-        } catch(e){
-            if(e){
-                
-            }
-        }         
-    })    
-}
+jsonfile.readFile(setting_file, function(err, obj) {
+    if (!obj) {
+        jsonfile.writeFileSync(setting_file, default_settings, {spaces: 2});
+        config = default_settings;
+        fatihReady();
+    } else {
+        config = obj;
+        fatihReady();
+    }
+})
 
 // function index(project_name, project_path) {
 //     jsonfile.readFile(setting_file, function(err, obj) {
@@ -84,5 +75,27 @@ program
         jsonfile.writeFileSync('./fatih.json', project_array, {spaces: 2});       
     });
 });
+
+function fatihReady() {   
+    if (args[0]) {
+        jsonfile.readFile('./fatih.json', function(err, obj) {
+            try {
+                if (obj.custom_commands[args[0]]) {
+                    console.log('asdasdasd');
+                    var selected_command = obj.custom_commands[args[0]];
+                    shell.exec('start cmd /K "'+selected_command+'"');
+                    process.exit(1);
+                } else if (args[0] == 'is') {
+                    shell.exec('start '+obj.github+'/issues');
+                    process.exit(1);
+                }    
+            } catch(e){
+                if(e){
+                    
+                }
+            }         
+        })    
+    }    
+}
 
 program.parse(process.argv);
