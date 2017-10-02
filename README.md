@@ -20,7 +20,7 @@ fatih -h
 ```
 
 ## Set editor
-## Example
+### Example
 ```
 fatih set "C:\Program Files\Microsoft VS Code\Code.exe"
 ```
