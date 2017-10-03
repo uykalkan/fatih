@@ -69,7 +69,7 @@ program
 .description('Proje gidin')
 .action(function(env, options){
 
-   questions.go.choices = Object.keys(fatih_settings.index)
+   questions.go[0].choices = Object.keys(fatih_settings.index)
 
     if (Object.keys(fatih_settings.index).length) {
         inquirer.prompt(questions.go).then(function (answers) {
