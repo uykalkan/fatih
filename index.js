@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 var jsonfile = require('jsonfile');
 var path = require('path');
-var shell = require('shelljs');
+var exec = require('child_process').exec;
 var inquirer = require('inquirer');
 var program = require('commander');
 var os = require('os');
 var questions = require('./questions');
 var util = require('./util');
-var store = require('store');
 var fs = require('fs');
 var opn = require('opn');
 var envEditor = require('env-editor');
@@ -43,7 +42,7 @@ program
     questions.init[2].choices = envEditor.all();
     inquirer.prompt(questions.init).then(function (answers) {
         
-        fatih_settings.index[answers.project_name] = shell.pwd().stdout;
+        fatih_settings.index[answers.project_name] = process.cwd()
 
         return Promise.all([
                  util.writeFatih({
@@ -67,28 +66,7 @@ program
 // GO COMMAND
 program
 .command('go')
-.description('Projenize gidin')
-.action(function(env, options){
-
-   questions.go[0].choices = Object.keys(fatih_settings.index)
-
-    if (Object.keys(fatih_settings.index).length) {
-        inquirer.prompt(questions.go).then(function (answers) {
-            project_path = fatih_settings.index[answers.project];
-            shell.exec('start "" "'+project_path+'"');
-            clearIndex();
-        });        
-    } else {
-        console.log('Hiç projeniz yok');
-    }
-
-
-});
-
-// GO COMMAND
-program
-.command('open')
-.description('Proje dizini açar')
+.description('Proje gidin')
 .action(function(env, options){
 
    questions.go.choices = Object.keys(fatih_settings.index)
@@ -124,7 +102,7 @@ program
                 case 'code':
                     var editor = envEditor.get(fatih_data.config.editor);
                     if(editor.bin){
-                        shell.exec(`${editor.bin} ${process.cwd()}`);
+                        exec(`${editor.bin} ${process.cwd()}`);
                     }
                 break;
         
@@ -133,9 +111,9 @@ program
                         var selected_command = fatih_data.commands[args[0]];
                         if (selected_command) {
                             if(process.platform == 'win32'){
-                                shell.exec('start cmd /K "'+selected_command+'"');
+                                exec('start cmd /K "'+selected_command+'"');
                             } else {
-                                shell.exec(`${selected_command}`);
+                                exec(`${selected_command}`);
                             }
                             process.exit(1);                
                         } else {
