@@ -13,8 +13,6 @@ var fs = require('fs');
 var setting_file = path.join(os.homedir(), '/.fatih.setting.json');
 var args = process.argv.slice(2);
 
-var exec = require('child_process').exec;
-
 var fatih_data = util.readFatih();
 var fatih_settings = util.readSettingsFatih();
 
@@ -32,59 +30,35 @@ if (!fatih_settings) {
     clearIndex();
 }
 
-if (args[0] && fatih_data != null) {
-
-    switch (args[0]) {
-        case 'is':
-            shell.exec('start '+fatih_data.github+'/issues');
-        break;
-
-        case 'editor':
-            shell.exec('code -n '+process.cwd());
-        break;
-
-        default:
-            var selected_command = fatih_data.custom_commands[args[0]];
-            if (selected_command) {
-                shell.exec('start cmd /K "'+selected_command+'"');
-                process.exit(1);                
-            } else {
-                //
-            }
-        break;
-    }
-    
-}
-
 program.version('2.0.0');
 
 // INIT COMMAND
 program
 .command('init')
-.description('yeni bir proje ekleyin')
+.description('Proje ekleyin')
 .action(function(env, options){
 
     inquirer.prompt(questions.init).then(function (answers) {
         
-        return util.writeFatih({
-            name:answers.project_name,
-            github:answers.github_url,
-            custom_commands : {
-                "pull" : "git pull",
-                "push" : "git push"
-            }
-        }).then(function(){
-            fatih_settings.index[answers.project_name] = shell.pwd().stdout;
-            util.writeSettingsFatih(fatih_settings).then(function(){
+        fatih_settings.index[answers.project_name] = shell.pwd().stdout;
 
-            });
-        });
-
+        return Promise.all([
+                 util.writeFatih({
+                    name:answers.project_name,
+                    github:answers.github_url,
+                    custom_commands : {
+                        "pull" : "git pull",
+                        "push" : "git push"
+                    }
+                }), 
+                util.writeSettingsFatih(fatih_settings)
+        ]);
     }).then(function(){
         console.log('Bilgilerini başarıyla kaydettik');
     }).catch(function(err){
         console.log('Birşeyler oldu...', err)
     })
+
 });
 
 // GO COMMAND
@@ -93,17 +67,10 @@ program
 .description('projenize gidin')
 .action(function(env, options){
 
-    var question = [
-        {
-            type: 'list',
-            name: 'project',
-            message: 'Hangi projeye gidiyoruz?',
-            choices: Object.keys(fatih_settings.index)
-        }
-    ];
+   questions.go.choices = Object.keys(fatih_settings.index)
 
     if (Object.keys(fatih_settings.index).length) {
-        inquirer.prompt(question).then(function (answers) {
+        inquirer.prompt(questions.go).then(function (answers) {
             project_path = fatih_settings.index[answers.project];
             shell.exec('start "" "'+project_path+'"');
             clearIndex();
@@ -114,6 +81,38 @@ program
 
 
 });
+
+program
+.command('*')
+.description('Proje komutunuz')
+.action(function(env, options){
+
+    if (args[0] && fatih_data != null) {
+        
+            switch (args[0]) {
+                case 'is':
+                    shell.exec('start '+fatih_data.github+'/issues');
+                break;
+        
+                case 'editor':
+                    shell.exec('code -n '+process.cwd());
+                break;
+        
+                default:
+                    var selected_command = fatih_data.custom_commands[args[0]];
+                    if (selected_command) {
+                        shell.exec('start cmd /K "'+selected_command+'"');
+                        process.exit(1);                
+                    } else {
+                        console.log('Herhangi bir komut bulamadık')
+                    }
+                break;
+            }
+            
+    }
+
+});
+
 program.parse(process.argv);
 
 function clearIndex() {

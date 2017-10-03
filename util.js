@@ -45,7 +45,22 @@ function readSettingsFatih(data){
 
 }
 
+function clearIndex() {
+    for (var key in fatih_settings.index) {
+        var path = fatih_settings.index[key];
+        if (!fs.existsSync(path+'/.fatih')) {
+            console.log('naberrr');
+            delete fatih_settings.index[key];
+        }            
+    }    
+
+    util.writeSettingsFatih(fatih_settings).then(function(){
+        
+    });
+}
+
 module.exports.writeFatih = writeFatih;
 module.exports.readFatih = readFatih;
 module.exports.writeSettingsFatih = writeSettingsFatih;
 module.exports.readSettingsFatih = readSettingsFatih;
+module.exports.clearIndex = clearIndex;

@@ -10,5 +10,13 @@ module.exports = {
             name: 'github_url',
             message: 'Github URL?'
         }
+    ],
+    go: [
+        {
+            type: 'list',
+            name: 'project',
+            message: 'Hangi projeye gidiyoruz?',
+        }
     ]
 }
+
