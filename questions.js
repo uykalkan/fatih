@@ -8,7 +8,12 @@ module.exports = {
         {
             type: 'input',
             name: 'github_url',
-            message: 'Github URL?'
+            message: 'Github Proje Adresiniz?'
+        },
+        {
+            type:'list',
+            name:'editor',
+            message: 'Kullanmak istediğiniz editör?'
         }
     ],
     go: [

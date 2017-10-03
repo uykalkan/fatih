@@ -9,6 +9,8 @@ var questions = require('./questions');
 var util = require('./util');
 var store = require('store');
 var fs = require('fs');
+var opn = require('opn');
+var envEditor = require('env-editor');
 
 var setting_file = path.join(os.homedir(), '/.fatih.setting.json');
 var args = process.argv.slice(2);
@@ -38,6 +40,7 @@ program
 .description('Proje ekleyin')
 .action(function(env, options){
 
+    questions.init[2].choices = envEditor.all();
     inquirer.prompt(questions.init).then(function (answers) {
         
         fatih_settings.index[answers.project_name] = shell.pwd().stdout;
@@ -45,11 +48,11 @@ program
         return Promise.all([
                  util.writeFatih({
                     name:answers.project_name,
-                    github:answers.github_url,
-                    custom_commands : {
-                        "pull" : "git pull",
-                        "push" : "git push"
-                    }
+                    config: {
+                        github:answers.github_url,
+                        editor:answers.editor,
+                    },
+                    commands : { }
                 }), 
                 util.writeSettingsFatih(fatih_settings)
         ]);
@@ -64,10 +67,10 @@ program
 // GO COMMAND
 program
 .command('go')
-.description('projenize gidin')
+.description('Projenize gidin')
 .action(function(env, options){
 
-   questions.go.choices = Object.keys(fatih_settings.index)
+   questions.go[0].choices = Object.keys(fatih_settings.index)
 
     if (Object.keys(fatih_settings.index).length) {
         inquirer.prompt(questions.go).then(function (answers) {
@@ -75,6 +78,28 @@ program
             shell.exec('start "" "'+project_path+'"');
             clearIndex();
         });        
+    } else {
+        console.log('Hiç projeniz yok');
+    }
+
+
+});
+
+// GO COMMAND
+program
+.command('open')
+.description('Proje dizini açar')
+.action(function(env, options){
+
+   questions.go.choices = Object.keys(fatih_settings.index)
+
+    if (Object.keys(fatih_settings.index).length) {
+        inquirer.prompt(questions.go).then(function (answers) {
+            project_path = fatih_settings.index[answers.project];
+            opn(project_path);
+        }).then(function (answers) {
+            // dizin açılmış olmalı
+        })
     } else {
         console.log('Hiç projeniz yok');
     }
@@ -91,19 +116,32 @@ program
         
             switch (args[0]) {
                 case 'is':
-                    shell.exec('start '+fatih_data.github+'/issues');
+                    opn(`${fatih_data.config.github}/issues`).then(function(){
+
+                    })
                 break;
         
-                case 'editor':
-                    shell.exec('code -n '+process.cwd());
+                case 'code':
+                    var editor = envEditor.get(fatih_data.config.editor);
+                    if(editor.bin){
+                        shell.exec(`${editor.bin} ${process.cwd()}`);
+                    }
                 break;
         
                 default:
-                    var selected_command = fatih_data.custom_commands[args[0]];
-                    if (selected_command) {
-                        shell.exec('start cmd /K "'+selected_command+'"');
-                        process.exit(1);                
-                    } else {
+                    try{
+                        var selected_command = fatih_data.commands[args[0]];
+                        if (selected_command) {
+                            if(process.platform == 'win32'){
+                                shell.exec('start cmd /K "'+selected_command+'"');
+                            } else {
+                                shell.exec(`${selected_command}`);
+                            }
+                            process.exit(1);                
+                        } else {
+                            console.log('Herhangi bir komut bulamadık')
+                        }
+                    }catch(err){
                         console.log('Herhangi bir komut bulamadık')
                     }
                 break;

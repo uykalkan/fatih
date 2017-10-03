@@ -1,4 +1,4 @@
-# Fatih v2 (Currently only Windows support)
+# Fatih v2
 Fatih a.k.a the intelligent hero
 
 ## Installation
