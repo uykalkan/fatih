@@ -1,6 +1,6 @@
 {
   "name": "fatih",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Developer Assistance",
   "main": "index.js",
   "bin": {
@@ -26,6 +26,6 @@
     "inquirer": "^3.3.0",
     "jsonfile": "^4.0.0",
     "opn": "^5.1.0",
-    "path": "^0.12.7",
+    "path": "^0.12.7"
   }
 }

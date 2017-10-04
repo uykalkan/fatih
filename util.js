@@ -49,7 +49,6 @@ function clearIndex() {
     for (var key in fatih_settings.index) {
         var path = fatih_settings.index[key];
         if (!fs.existsSync(path+'/.fatih')) {
-            console.log('naberrr');
             delete fatih_settings.index[key];
         }            
     }    

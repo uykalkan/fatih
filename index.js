@@ -18,20 +18,19 @@ var fatih_data = util.readFatih();
 var fatih_settings = util.readSettingsFatih();
 
 var default_fatih_settings = {
-    editor: 'code',
     index: {},
 };
 
 // indexi döner ve configi yerinde olmayan varsa indexten kaldırır
 if (!fatih_settings) {
     util.writeSettingsFatih(default_fatih_settings).then(function(){
-        var fatih_settings = default_fatih_settings;
+        fatih_settings = default_fatih_settings;
     });
 } else {
     clearIndex();
 }
 
-program.version('2.0.0');
+program.version('2.1.1');
 
 // INIT COMMAND
 program
@@ -135,7 +134,6 @@ function clearIndex() {
     for (var key in fatih_settings.index) {
         var path = fatih_settings.index[key];
         if (!fs.existsSync(path+'/.fatih')) {
-            console.log('naberrr');
             delete fatih_settings.index[key];
         }            
     }    
