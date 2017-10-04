@@ -1,0 +1,10 @@
+{
+  "name": "fatih",
+  "config": {
+    "github": "https://github.com/uykalkan/fatih",
+    "editor": "Visual Studio Code"
+  },
+  "commands": {
+    "push" : "git push origin master"
+  }
+}
