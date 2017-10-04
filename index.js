@@ -10,6 +10,7 @@ var util = require('./util');
 var fs = require('fs');
 var opn = require('opn');
 var envEditor = require('env-editor');
+var npm_settings = require('./package.json');
 
 var setting_file = path.join(os.homedir(), '/.fatih.setting.json');
 var args = process.argv.slice(2);
@@ -30,7 +31,7 @@ if (!fatih_settings) {
     clearIndex();
 }
 
-program.version('2.1.1');
+program.version(npm_settings.version);
 
 // INIT COMMAND
 program
